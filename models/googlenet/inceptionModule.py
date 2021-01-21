@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-
+import torch.nn.functional as F
 class Inception(nn.Module):
     def __init__(self, infmap, fmap1, fmap13, fmap3, fmap15, fmap5, fpool, auxclassifier = False):
         super().__init__(self)  
@@ -23,19 +23,28 @@ class Inception(nn.Module):
 
     def forward(self, x):
         y1 = self.conv1(x)
+        y1 = F.relu(y1)
         y3 = self.conv13(x)
+        y3 = F.relu(y3)
         y3 = self.conv3(y3)
+        y3 = F.relu(y3)
         y5 = self.conv15(x)
+        y5 = F.relu(y5)
         y5 = self.conv5(y5)
+        y5 = F.relu(y5)
         ypool = self.pool1(x)
         ypool = self.convpool(ypool)
+        ypool = F.relu(ypool)
         y = torch.cat([y1, y3, y5, ypool], 1)
         if self.auxclassifier == True:
             ax = self.avgpool(x)
             ax = self.auxconv(ax)
+            ax = F.relu(ax)
             ax = self.linear1(ax)
+            ax = F.relu(ax)
             ax = self.dropout(ax)
             ax = self.linear2(ax)
+            F.relu(ax)
             ax = self.softmax(ax)
             return y, ax
         else:
