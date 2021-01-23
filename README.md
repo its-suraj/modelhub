@@ -5,3 +5,4 @@ Pytorch implementation of models
     -  Alexnet
     -  ZFNet
     -  GoogleNet
+    -  VGG16

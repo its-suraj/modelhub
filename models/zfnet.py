@@ -50,6 +50,7 @@ class zfNet(nn.Module):
         x = self.conv5(x)
         x = F.relu(x)
         x = self.maxpool3(x)
+        x = torch.flatten(x ,1)
         x = self.linear1(x)
         x = F.relu(x)
         x = self.dropout(x)

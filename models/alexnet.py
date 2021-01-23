@@ -4,15 +4,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import math
 
-#my logic for LRNorm
-# def LRNorm(A, k, alpha, beta, n):
-#     N = A.shape[1]
-#     B = torch.zeros(A.shape)
-#     for i in range(N):
-#         kindexStart = max(0, math.floor(i - n/2))
-#         kindexStop = min(N - 1, math.ceil(i + n/2))
-#         B[:, i, :, :] = A[:, i, :, :]/(k + alpha*A[:, kindexStart:kindexStop, :, :].sum())**beta
-#     return B
+
 
 #LRN module from : https://github.com/jiecaoyu/pytorch_imagenet/blob/master/networks/model_list/alexnet.py
 class LRN(nn.Module):
@@ -81,6 +73,7 @@ class alexNet(nn.Module):
         x = self.conv5(x)
         x = F.relu(x)
         x = self.maxpool3(x)
+        x = torch.flatten(x, 1)
         x = self.linear1(x)
         x = F.relu(x)
         x = self.dropout1(x)
